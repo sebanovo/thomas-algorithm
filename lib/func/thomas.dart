@@ -2,9 +2,9 @@ void mostrarMatriz(List<List<double>> v, int size) {
   String s = '';
   for (int i = 0; i < size; i++) {
     for (int j = 0; j < size; j++) {
-      s = s + v[i][j].toString() + '\t';
+      s = '$s${v[i][j]}\t';
     }
-    s = s + '\n';
+    s = '$s\n';
   }
   print(s);
 }

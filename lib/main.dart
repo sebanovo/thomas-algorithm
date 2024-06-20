@@ -13,10 +13,8 @@ List<Widget> widgets = const [
   Icon(Icons.person),
 ];
 
-var initialRoute = '/home';
-
 final Map<String, WidgetBuilder> routes = {
-  initialRoute: (BuildContext context) => const Introduction(),
+  '/introduction': (BuildContext context) => const Introduction(),
   '/home': (BuildContext context) => const Home(),
 };
 
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: initialRoute,
+      initialRoute: '/home',
       routes: routes,
     );
   }
