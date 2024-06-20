@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home.dart';
 import 'package:flutter_application_1/tab/index.dart';
 
 class Introduction extends StatefulWidget {
@@ -8,7 +9,7 @@ class Introduction extends StatefulWidget {
   State<Introduction> createState() => _IntroductionState();
 }
 
-List<Widget> widgets = [welcomeTab(), descriptionTab(), membersTab()];
+List<Widget> tabs = [welcomeTab(), descriptionTab(), membersTab()];
 
 class _IntroductionState extends State<Introduction>
     with SingleTickerProviderStateMixin {
@@ -19,7 +20,7 @@ class _IntroductionState extends State<Introduction>
   void initState() {
     super.initState();
     controller = TabController(
-        length: widgets.length, initialIndex: _currentIndex, vsync: this);
+        length: tabs.length, initialIndex: _currentIndex, vsync: this);
   }
 
   @override
@@ -32,13 +33,18 @@ class _IntroductionState extends State<Introduction>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Metodo de Tomas'),
+        title: const Text('Metodo de Thomas'),
         centerTitle: true,
       ),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          TabBarView(controller: controller, children: widgets),
+          TabBarView(
+            controller: controller,
+            physics:
+                const NeverScrollableScrollPhysics(), // desasctiva las fisicas
+            children: tabs,
+          ),
           Positioned(
             bottom: 40,
             child: TabPageSelector(
@@ -51,8 +57,13 @@ class _IntroductionState extends State<Introduction>
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            _currentIndex = (_currentIndex + 1) % widgets.length;
-            controller.animateTo(_currentIndex);
+            _currentIndex = _currentIndex + 1;
+            if (_currentIndex != tabs.length) {
+              return controller.animateTo(_currentIndex);
+            }
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
           });
         },
         hoverElevation: 0,

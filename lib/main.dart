@@ -1,35 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_application_1/pages/index.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// List<Widget> widgets = const [
-//   Icon(Icons.home),
-//   Icon(Icons.settings),
-//   Icon(Icons.person),
-// ];
-
-// final Map<String, WidgetBuilder> routes = {
-//   '/': (BuildContext context) => const SplashScreen(),
-//   '/intro': (BuildContext context) => const IntroPages(),
-//   '/home': (BuildContext context) => const HomaPage(),
-// };
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: "My first app",
-//       initialRoute: '/',
-//       routes: routes,
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home.dart';
 import 'package:flutter_application_1/screens/introduction.dart';
@@ -45,7 +13,7 @@ List<Widget> widgets = const [
   Icon(Icons.person),
 ];
 
-var initialRoute = '/intro';
+var initialRoute = '/home';
 
 final Map<String, WidgetBuilder> routes = {
   initialRoute: (BuildContext context) => const Introduction(),
