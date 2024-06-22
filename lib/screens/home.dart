@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/text_config.dart';
+import 'package:flutter_application_1/func/thomas.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -7,8 +8,6 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
-
-const double widthTextField = 70.0;
 
 class _HomeState extends State<Home> {
   final List<String> items = ['3x3', '4x4', '5x5', '6x6'];
@@ -19,7 +18,7 @@ class _HomeState extends State<Home> {
   List<TextEditingController> anControllers = [];
   List<TextEditingController> dnControllers = [];
 
-  List<double> xResults = [];
+  List<double> xResults = []; // cambiado
 
   @override
   void initState() {
@@ -29,9 +28,11 @@ class _HomeState extends State<Home> {
   }
 
   void _initializeControllers(int count) {
-    cnControllers = List.generate(count, (index) => TextEditingController());
+    cnControllers =
+        List.generate(count - 1, (index) => TextEditingController());
     bnControllers = List.generate(count, (index) => TextEditingController());
-    anControllers = List.generate(count, (index) => TextEditingController());
+    anControllers =
+        List.generate(count - 1, (index) => TextEditingController());
     dnControllers = List.generate(count, (index) => TextEditingController());
   }
 
@@ -52,77 +53,54 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  void _calculateResults() {
-    setState(() {
-      List<double> cn = cnControllers
-          .map((controller) => double.tryParse(controller.text) ?? 0)
-          .toList();
-      List<double> bn = bnControllers
-          .map((controller) => double.tryParse(controller.text) ?? 0)
-          .toList();
-      List<double> an = anControllers
-          .map((controller) => double.tryParse(controller.text) ?? 0)
-          .toList();
-      List<double> dn = dnControllers
-          .map((controller) => double.tryParse(controller.text) ?? 0)
-          .toList();
+  void _calculateResults(BuildContext context) {
+    try {
+      setState(() {
+        List<double> cn = cnControllers
+            .map((controller) => double.tryParse(controller.text) ?? 0)
+            .toList();
+        List<double> bn = bnControllers
+            .map((controller) => double.tryParse(controller.text) ?? 0)
+            .toList();
+        List<double> an = anControllers
+            .map((controller) => double.tryParse(controller.text) ?? 0)
+            .toList();
+        List<double> dn = dnControllers
+            .map((controller) => double.tryParse(controller.text) ?? 0)
+            .toList();
 
-      if (cn.isNotEmpty) {
-        cn.removeAt(0); // Eliminar el primer elemento de la lista cn
-      }
+        Thomas thomas = Thomas();
+        List<double>? results = thomas.method(an, bn, cn, dn);
 
-      if (an.isNotEmpty) {
-        an.removeLast(); // Eliminar el último elemento de la lista an
-      }
-
-      xResults = thomas(size: numberOfFields, cn: cn, bn: bn, an: an, b: dn);
-    });
+        if (results != null) {
+          xResults = results;
+        } else {
+          xResults = [];
+        }
+      });
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
   }
 
-  List<double> thomas({
-    required int size,
-    required List<double> cn,
-    required List<double> bn,
-    required List<double> an,
-    required List<double> b,
-  }) {
-    List<List<double>> L = List.generate(size, (i) => List.filled(size, 0));
-    List<List<double>> U = List.generate(size, (i) => List.filled(size, 0));
-
-    // Crear la matriz L
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        L[i][j] = (i == j) ? 1 : 0;
-        U[i][j] = 0;
-      }
-    }
-
-    U[0][0] = bn[0];
-    for (int i = 1; i < size; i++) {
-      U[i - 1][i] = cn[i - 1];
-    }
-
-    for (int i = 2; i <= size; i++) {
-      an[i - 2] = an[i - 2] / bn[i - 2];
-      L[i - 1][i - 2] = an[i - 2];
-      bn[i - 1] = bn[i - 1] - an[i - 2] * cn[i - 2];
-      U[i - 1][i - 1] = bn[i - 1];
-    }
-
-    // Resolver L * D = B
-    List<double> d = List.filled(size, 0);
-    d[0] = b[0];
-    for (int i = 1; i < size; i++) {
-      d[i] = b[i] - (L[i][i - 1]) * d[i - 1];
-    }
-
-    // Resolver U * X = D
-    List<double> x = List.filled(size, 0);
-    x[size - 1] = d[size - 1] / U[size - 1][size - 1];
-    for (int i = size - 2; i >= 0; i--) {
-      x[i] = (d[i] - U[i][i + 1] * x[i + 1]) / U[i][i];
-    }
-    return x;
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -165,9 +143,8 @@ class _HomeState extends State<Home> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields, (index) {
-                return SizedBox(
-                  width: widthTextField,
+              children: List.generate(numberOfFields - 1, (index) {
+                return Expanded(
                   child: TextField(
                     controller: cnControllers[index],
                     decoration: InputDecoration(
@@ -185,8 +162,7 @@ class _HomeState extends State<Home> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(numberOfFields, (index) {
-                return SizedBox(
-                  width: widthTextField,
+                return Expanded(
                   child: TextField(
                     controller: bnControllers[index],
                     decoration: InputDecoration(
@@ -203,9 +179,8 @@ class _HomeState extends State<Home> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields, (index) {
-                return SizedBox(
-                  width: widthTextField,
+              children: List.generate(numberOfFields - 1, (index) {
+                return Expanded(
                   child: TextField(
                     controller: anControllers[index],
                     decoration: InputDecoration(
@@ -223,8 +198,7 @@ class _HomeState extends State<Home> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(numberOfFields, (index) {
-                return SizedBox(
-                  width: widthTextField,
+                return Expanded(
                   child: TextField(
                     controller: dnControllers[index],
                     decoration: InputDecoration(
@@ -237,7 +211,7 @@ class _HomeState extends State<Home> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-              onPressed: _calculateResults,
+              onPressed: () => _calculateResults(context),
               child: const Text(
                 'Calcular!!',
                 style: TextStyle(color: Colors.white),

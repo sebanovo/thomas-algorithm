@@ -1,79 +1,146 @@
-void mostrarMatriz(List<List<double>> v, int size) {
-  String s = '';
-  for (int i = 0; i < size; i++) {
-    for (int j = 0; j < size; j++) {
-      s = '$s${v[i][j]}\t';
+class Thomas {
+  double _determinant(List<List<double>> matrix) {
+    // Verificar si la matriz es cuadrada
+    int rows = matrix.length;
+    int cols = matrix[0].length;
+    if (rows != cols) {
+      throw Exception('La matriz no es cuadrada');
     }
-    s = '$s\n';
-  }
-  print(s);
-}
 
-List<double> thomas({
-  required int size,
-  required List<double> cn,
-  required List<double> bn,
-  required List<double> an,
-  required List<double> b,
-}) {
-  List<List<double>> L = List.generate(size, (i) => List.filled(size, 0));
-  List<List<double>> U = List.generate(size, (i) => List.filled(size, 0));
-
-  // Crear la matriz L
-  for (int i = 0; i < size; i++) {
-    for (int j = 0; j < size; j++) {
-      L[i][j] = (i == j) ? 1 : 0;
-      U[i][j] = 0;
+    // Caso base para matriz 1x1
+    if (rows == 1) {
+      return matrix[0][0];
     }
+
+    double det = 0;
+    // Expandir por la primera fila (o cualquier fila/ columna)
+    for (int j = 0; j < cols; j++) {
+      // Calcular el cofactor matrix[0][j]
+      double cofactor = matrix[0][j] *
+          _cofactorSign(0, j) *
+          _determinant(_cofactorMatrix(matrix, 0, j));
+      det += cofactor;
+    }
+
+    return det;
   }
 
-  U[0][0] = bn[0];
-  for (int i = 1; i < size; i++) {
-    U[i - 1][i] = cn[i - 1];
+  // Función para calcular el signo del cofactor
+  double _cofactorSign(int row, int col) {
+    return ((row + col) % 2 == 0) ? 1 : -1;
   }
 
-  for (int i = 2; i <= size; i++) {
-    an[i - 2] = an[i - 2] / bn[i - 2];
-    L[i - 1][i - 2] = an[i - 2];
-    bn[i - 1] = bn[i - 1] - an[i - 2] * cn[i - 2];
-    U[i - 1][i - 1] = bn[i - 1];
+  // Función para obtener la matriz de cofactores eliminando la fila y columna específicas
+  List<List<double>> _cofactorMatrix(
+      List<List<double>> matrix, int row, int col) {
+    List<List<double>> subMatrix = [];
+    int n = matrix.length;
+    for (int i = 0; i < n; i++) {
+      if (i != row) {
+        List<double> newRow = [];
+        for (int j = 0; j < n; j++) {
+          if (j != col) {
+            newRow.add(matrix[i][j]);
+          }
+        }
+        subMatrix.add(newRow);
+      }
+    }
+    return subMatrix;
   }
 
-  mostrarMatriz(L, size);
-  mostrarMatriz(U, size);
-
-  // Resolver L * D = B
-  List<double> d = List.filled(size, 0);
-  d[0] = b[0];
-  for (int i = 1; i < size; i++) {
-    d[i] = b[i] - (L[i][i - 1]) * d[i - 1];
+  void _mostarMatriz(List<List<double>> v) {
+    int size = v.length;
+    String s = '';
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        s += '${v[i][j]}\t';
+      }
+      s += '\n';
+    }
+    print(s);
   }
-  print(d);
 
-  // Resolver U * X = D
-  List<double> x = List.filled(size, 0);
-  x[size - 1] = d[size - 1] / U[size - 1][size - 1];
-  for (int i = size - 2; i >= 0; i--) {
-    x[i] = (d[i] - U[i][i + 1] * x[i + 1]) / U[i][i];
+  List<List<double>> _juntarMatriz(
+      List<double> an, List<double> bn, List<double> cn) {
+    List<List<double>> matriz =
+        List.generate(bn.length, (i) => List.filled(bn.length, 0));
+    // juntar an
+    for (int i = 0; i < bn.length - 1; i++) {
+      matriz[i][i + 1] = an[i];
+    }
+    // juntar bn
+    for (int i = 0; i < bn.length; i++) {
+      matriz[i][i] = bn[i];
+    }
+    // juntar cn
+    for (int i = 0; i < bn.length - 1; i++) {
+      matriz[i + 1][i] = cn[i];
+    }
+    return matriz;
   }
-  return x;
-}
 
-void main() {
-  List<List<double>> original = [
-    [0.5, -2.7, 0, 0],
-    [1, -0.2, -3, 0],
-    [0, 4.9, -7.8, 4],
-    [0, 0, 2.8, -3.4],
-  ];
-  List<double> b = [-5.925, -1.35, 4.975, -0.1];
+  List<double>? method(
+      List<double> an, List<double> bn, List<double> cn, List<double> d) {
+    if (cn.isEmpty || bn.isEmpty || an.isEmpty || d.isEmpty)
+      throw Exception('Campos vacíos');
+    if (cn.any((element) => element == 0) ||
+        bn.any((element) => element == 0) ||
+        an.any((element) => element == 0)) {
+      throw Exception('Ningun coeficiente de la diagonal debe ser cero');
+    }
+    if (_determinant(_juntarMatriz(an, bn, cn)) == 0)
+      throw Exception('La matriz es no invertible');
 
-  mostrarMatriz(original, 4);
+    int size = d.length;
 
-  int size = 4;
-  List<double> cn = [-2.7, -3, 4];
-  List<double> bn = [0.5, -0.2, -7.8, -3.4];
-  List<double> an = [1, 4.9, 2.8, -3.4];
+    // Paso 1: Eliminación hacia adelante
+    for (int i = 1; i < size; i++) {
+      double m = an[i - 1] / bn[i - 1];
+      if (bn[i] == 0) {
+        throw Exception(
+            'División por cero detectada en la diagonal principal.');
+      }
+      bn[i] = bn[i] - m * cn[i - 1];
+      d[i] = d[i] - m * d[i - 1];
+    }
 
-  thomas(size: size, cn: cn, bn: bn, an: an, b: b);
+    // Paso 2: Sustitución hacia atrás
+    List<double> x = List.filled(size, 0);
+    x[size - 1] = d[size - 1] / bn[size - 1];
+    for (int i = size - 2; i >= 0; i--) {
+      if (bn[i] == 0) {
+        throw Exception(
+            'División por cero detectada en la diagonal principal.');
+      }
+
+      x[i] = (d[i] - cn[i] * x[i + 1]) / bn[i];
+    }
+
+    return x;
+  }
+
+  List<double> _obtenerCn(List<List<double>> matriz) {
+    List<double> cn = [];
+    for (int i = 0; i < matriz.length - 1; i++) {
+      cn.add(matriz[i][i + 1]);
+    }
+    return cn;
+  }
+
+  List<double> _obtenerAn(List<List<double>> matriz) {
+    List<double> an = [];
+    for (int i = 0; i < matriz.length - 1; i++) {
+      an.add(matriz[i + 1][i]);
+    }
+    return an;
+  }
+
+  List<double> _obtenerBn(List<List<double>> matriz) {
+    List<double> bn = [];
+    for (int i = 0; i < matriz.length; i++) {
+      bn.add(matriz[i][i]);
+    }
+    return bn;
+  }
 }
