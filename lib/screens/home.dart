@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   List<TextEditingController> anControllers = [];
   List<TextEditingController> dnControllers = [];
 
-  List<double> xResults = []; // cambiado
+  List<double> xResults = [];
 
   @override
   void initState() {
@@ -107,8 +107,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Metodo de Thomas"),
+        title: const Text('Método de Thomas'),
         centerTitle: true,
+        backgroundColor: const Color(0xFF111827), // Fondo oscuro
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -210,10 +212,11 @@ class _HomeState extends State<Home> {
               }),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF111827)), // Fondo oscuro),
               onPressed: () => _calculateResults(context),
               child: const Text(
-                'Calcular!!',
+                'Calcular',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -223,7 +226,7 @@ class _HomeState extends State<Home> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
                 margin: const EdgeInsets.only(bottom: 10),
-                color: Colors.black,
+                color: const Color(0xFF111827), // Fondo oscuro,
                 child: Text(
                   'Resultado X${index + 1}: ${xResults[index]}',
                   style: const TextStyle(color: Colors.white),

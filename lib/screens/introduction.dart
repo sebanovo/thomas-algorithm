@@ -33,23 +33,31 @@ class _IntroductionState extends State<Introduction>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Metodo de Thomas'),
+        title: const Text('Método de Thomas'),
         centerTitle: true,
+        backgroundColor: const Color(0xFF111827), // Fondo oscuro
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           TabBarView(
             controller: controller,
-            physics:
-                const NeverScrollableScrollPhysics(), // desasctiva las fisicas
+            physics: const NeverScrollableScrollPhysics(),
             children: tabs,
           ),
           Positioned(
-            bottom: 40,
-            child: TabPageSelector(
-              color: Colors.black38,
-              controller: controller,
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
+              child: TabPageSelector(
+                color:
+                    Colors.white, // Color del indicador de página seleccionada
+                indicatorSize: 10.0, // Tamaño del indicador
+                controller: controller,
+              ),
             ),
           ),
         ],
@@ -58,17 +66,21 @@ class _IntroductionState extends State<Introduction>
         onPressed: () {
           setState(() {
             _currentIndex = _currentIndex + 1;
-            if (_currentIndex != tabs.length) {
-              return controller.animateTo(_currentIndex);
+            if (_currentIndex < tabs.length) {
+              controller.animateTo(_currentIndex);
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const Home()),
+              );
             }
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const Home()),
-            );
           });
         },
+        backgroundColor:
+            Color(0xFF111827), // Fondo oscuro para el botón flotante
         hoverElevation: 0,
         elevation: 0,
-        child: const Icon(Icons.navigate_next),
+        child: const Icon(Icons.navigate_next,
+            color: Colors.white), // Icono blanco
       ),
     );
   }

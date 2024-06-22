@@ -28,8 +28,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      initialRoute: '/home',
+      initialRoute: '/introduction',
       routes: routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
