@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home.dart';
-import 'package:flutter_application_1/screens/introduction.dart';
+import 'package:thomas_algorithm/screens/home.dart';
+import 'package:thomas_algorithm/screens/introduction.dart';
 
 void main() {
   runApp(const MyApp());

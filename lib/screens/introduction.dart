@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home.dart';
-import 'package:flutter_application_1/tab/index.dart';
+import 'package:thomas_algorithm/screens/home.dart';
+import 'package:thomas_algorithm/tab/index.dart';
 
 class Introduction extends StatefulWidget {
   const Introduction({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/constants/text_config.dart';
+import 'package:thomas_algorithm/constants/text_config.dart';
 
 Widget descriptionTab() {
   return const Padding(

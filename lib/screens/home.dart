@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/constants/text_config.dart';
-import 'package:flutter_application_1/func/thomas.dart';
+import 'package:thomas_algorithm/constants/text_config.dart';
+import 'package:thomas_algorithm/func/thomas.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
