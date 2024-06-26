@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:thomas_algorithm/constants/text_config.dart';
 import 'package:thomas_algorithm/func/thomas.dart';
+import 'package:thomas_algorithm/components/number_input_row.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<String> items = ['3x3', '4x4', '5x5', '6x6'];
+  final List<int> items = List.generate(10, (index) => index + 3);
   String? selectedItem;
   late int numberOfFields;
   List<TextEditingController> cnControllers = [];
@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    numberOfFields = int.parse(items[0][0]);
+    numberOfFields = items[0];
     _initializeControllers(numberOfFields);
   }
 
@@ -69,8 +69,7 @@ class _HomeState extends State<Home> {
             .map((controller) => double.tryParse(controller.text) ?? 0)
             .toList();
 
-        Thomas thomas = Thomas();
-        List<double>? results = thomas.method(an, bn, cn, dn);
+        List<double>? results = Thomas.method(an, bn, cn, dn);
 
         if (results != null) {
           xResults = results;
@@ -109,111 +108,54 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('Método de Thomas'),
         centerTitle: true,
-        backgroundColor: const Color(0xFF111827), // Fondo oscuro
+        backgroundColor: const Color(0xFF111827),
         titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             const Image(image: AssetImage('assets/image-tab-two.png')),
-            DropdownButton<String>(
-              value: selectedItem,
-              onChanged: (String? newValue) {
+            DropdownButton<int>(
+              value: selectedItem != null
+                  ? int.parse(selectedItem!.split('x')[0])
+                  : items[0],
+              onChanged: (int? newValue) {
                 setState(() {
-                  selectedItem = newValue;
-                  if (selectedItem != null && selectedItem!.isNotEmpty) {
-                    int firstCharacter = int.tryParse(selectedItem![0]) ?? 0;
-                    numberOfFields = firstCharacter;
-                    _initializeControllers(numberOfFields);
-                  } else {
-                    numberOfFields = 0;
-                    _initializeControllers(numberOfFields);
-                  }
+                  selectedItem = '$newValue x $newValue';
+                  numberOfFields = newValue!;
+                  _initializeControllers(numberOfFields);
                 });
               },
-              items: items.map((String value) {
-                return DropdownMenuItem<String>(
+              items: items.map((int value) {
+                return DropdownMenuItem<int>(
                   value: value,
-                  child: Text(value),
+                  child: Text('$value x $value'),
                 );
               }).toList(),
-              hint: const Text('3x3'),
             ),
-            const Text(
-              "Diagonal superior (cn)",
-              style: TextStyle(fontSize: fontSizeText),
+            NumberInputRow(
+              title: "Diagonal superior (cn)",
+              numberOfFields: numberOfFields - 1,
+              controllers: cnControllers,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields - 1, (index) {
-                return Expanded(
-                  child: TextField(
-                    controller: cnControllers[index],
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: '${index + 1}',
-                    ),
-                  ),
-                );
-              }),
+            NumberInputRow(
+              title: "Diagonal principal (bn)",
+              numberOfFields: numberOfFields,
+              controllers: bnControllers,
             ),
-            const Text(
-              "Diagonal principal (bn)",
-              style: TextStyle(fontSize: fontSizeText),
+            NumberInputRow(
+              title: "Diagonal inferior (an)",
+              numberOfFields: numberOfFields - 1,
+              controllers: anControllers,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields, (index) {
-                return Expanded(
-                  child: TextField(
-                    controller: bnControllers[index],
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: '${index + 1}',
-                    ),
-                  ),
-                );
-              }),
-            ),
-            const Text(
-              "Diagonal inferior (an)",
-              style: TextStyle(fontSize: fontSizeText),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields - 1, (index) {
-                return Expanded(
-                  child: TextField(
-                    controller: anControllers[index],
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: '${index + 1}',
-                    ),
-                  ),
-                );
-              }),
-            ),
-            const Text(
-              "Términos independientes (dn)",
-              style: TextStyle(fontSize: fontSizeText),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(numberOfFields, (index) {
-                return Expanded(
-                  child: TextField(
-                    controller: dnControllers[index],
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      hintText: '${index + 1}',
-                    ),
-                  ),
-                );
-              }),
+            NumberInputRow(
+              title: "Términos independientes (dn)",
+              numberOfFields: numberOfFields,
+              controllers: dnControllers,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF111827)), // Fondo oscuro),
+                  backgroundColor: const Color(0xFF111827)),
               onPressed: () => _calculateResults(context),
               child: const Text(
                 'Calcular',
@@ -226,9 +168,9 @@ class _HomeState extends State<Home> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(10),
                 margin: const EdgeInsets.only(bottom: 10),
-                color: const Color(0xFF111827), // Fondo oscuro,
+                color: const Color(0xFF111827),
                 child: Text(
-                  'Resultado X${index + 1}: ${xResults[index]}',
+                  'Resultado x${index + 1} =  ${xResults[index]}',
                   style: const TextStyle(color: Colors.white),
                 ),
               );

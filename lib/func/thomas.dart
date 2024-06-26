@@ -1,5 +1,5 @@
 class Thomas {
-  double _determinant(List<List<double>> matrix) {
+  static double _determinant(List<List<double>> matrix) {
     // Verificar si la matriz es cuadrada
     int rows = matrix.length;
     int cols = matrix[0].length;
@@ -26,12 +26,12 @@ class Thomas {
   }
 
   // Función para calcular el signo del cofactor
-  double _cofactorSign(int row, int col) {
+  static double _cofactorSign(int row, int col) {
     return ((row + col) % 2 == 0) ? 1 : -1;
   }
 
   // Función para obtener la matriz de cofactores eliminando la fila y columna específicas
-  List<List<double>> _cofactorMatrix(
+  static List<List<double>> _cofactorMatrix(
       List<List<double>> matrix, int row, int col) {
     List<List<double>> subMatrix = [];
     int n = matrix.length;
@@ -49,19 +49,7 @@ class Thomas {
     return subMatrix;
   }
 
-  void _mostarMatriz(List<List<double>> v) {
-    int size = v.length;
-    String s = '';
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        s += '${v[i][j]}\t';
-      }
-      s += '\n';
-    }
-    print(s);
-  }
-
-  List<List<double>> _juntarMatriz(
+  static List<List<double>> _juntarMatriz(
       List<double> an, List<double> bn, List<double> cn) {
     List<List<double>> matriz =
         List.generate(bn.length, (i) => List.filled(bn.length, 0));
@@ -80,7 +68,7 @@ class Thomas {
     return matriz;
   }
 
-  List<double>? method(
+  static List<double>? method(
       List<double> an, List<double> bn, List<double> cn, List<double> d) {
     if (cn.isEmpty || bn.isEmpty || an.isEmpty || d.isEmpty)
       throw Exception('Campos vacíos');
@@ -118,29 +106,5 @@ class Thomas {
     }
 
     return x;
-  }
-
-  List<double> _obtenerCn(List<List<double>> matriz) {
-    List<double> cn = [];
-    for (int i = 0; i < matriz.length - 1; i++) {
-      cn.add(matriz[i][i + 1]);
-    }
-    return cn;
-  }
-
-  List<double> _obtenerAn(List<List<double>> matriz) {
-    List<double> an = [];
-    for (int i = 0; i < matriz.length - 1; i++) {
-      an.add(matriz[i + 1][i]);
-    }
-    return an;
-  }
-
-  List<double> _obtenerBn(List<List<double>> matriz) {
-    List<double> bn = [];
-    for (int i = 0; i < matriz.length; i++) {
-      bn.add(matriz[i][i]);
-    }
-    return bn;
   }
 }
