@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<int> items = List.generate(10, (index) => index + 3);
+  final List<int> items = List.generate(8, (index) => index + 3);
   String? selectedItem;
   late int numberOfFields;
   List<TextEditingController> cnControllers = [];

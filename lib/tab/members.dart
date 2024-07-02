@@ -21,7 +21,7 @@ Widget membersTab() {
           style: TextStyle(fontSize: fontSizeText),
         ),
         Text(
-          'Lucas Flores Gonzales',
+          'Oliver Santos Garnica Valda',
           style: TextStyle(fontSize: fontSizeText),
         ),
         Text(
@@ -29,11 +29,7 @@ Widget membersTab() {
           style: TextStyle(fontSize: fontSizeText),
         ),
         Text(
-          'Mario Guardia Montero',
-          style: TextStyle(fontSize: fontSizeText),
-        ),
-        Text(
-          'Clider Eusebio Derbez',
+          'Juan Clider Servantes Dueñas',
           style: TextStyle(fontSize: fontSizeText),
         ),
       ],
