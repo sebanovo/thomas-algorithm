@@ -12,11 +12,10 @@ Este proyecto implementa el Método de Thomas, también conocido como algoritmo 
 
 ## Capturas de Pantalla
 
-<a href="https://postimg.cc/4n3KgS50" target="_blank"><img src="https://i.postimg.cc/9XdyG3qc/Screenshot-1719093070.png" alt="Screenshot-1719093070"/></a><br/><br/>
-<a href="https://postimg.cc/xqFXT3p1" target="_blank"><img src="https://i.postimg.cc/jdRPc8zP/Screenshot-1719093075.png" alt="Screenshot-1719093075"/></a><br/><br/>
-<a href="https://postimg.cc/vg0cnrQX" target="_blank"><img src="https://i.postimg.cc/x82HW5Br/Screenshot-1719093078.png" alt="Screenshot-1719093078"/></a><br/><br/>
-<a href="https://postimg.cc/V055WJvw" target="_blank"><img src="https://i.postimg.cc/x83HYHSX/Screenshot-1719093099.png" alt="Screenshot-1719093099"/></a><br/><br/>
-<a href="https://postimg.cc/2VbVqLgF" target="_blank"><img src="https://i.postimg.cc/yYn9bFP5/Screenshot-1719093124.png" alt="Screenshot-1719093124"/></a><br/><br/>
+| ![Screenshot-1719093070](https://i.postimg.cc/9XdyG3qc/Screenshot-1719093070.png) | ![Screenshot-1719093075](https://i.postimg.cc/jdRPc8zP/Screenshot-1719093075.png) | ![Screenshot-1719093078](https://i.postimg.cc/x82HW5Br/Screenshot-1719093078.png) |
+|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| ![Screenshot-1719093099](https://i.postimg.cc/x83HYHSX/Screenshot-1719093099.png) | ![Screenshot-1719093124](https://i.postimg.cc/yYn9bFP5/Screenshot-1719093124.png) |                                                                                 |
+
 
 ## Uso
 
